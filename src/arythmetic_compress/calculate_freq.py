@@ -11,15 +11,15 @@ def calculate_frequencies(data: str):
         else:
             freq[char] = 1
 
-    total_chars = len(data)
+    length_string = len(data)
 
-    logger.debug(f"Total characters: {total_chars}")
+    logger.debug(f"Total characters: {length_string}")
     logger.debug(f"Total unique characters: {len(freq)}")
     logger.debug(f"Unique characters: {freq}")
 
     # Создаем таблицу частот
-    freq_table = {char: f"{count}/{total_chars}" for char, count in freq.items()}
+    freq_table = {char: f"{count}/{length_string}" for char, count in freq.items()}
 
     logger.debug(f"Frequency table: {freq_table}")
 
-    return freq_table, freq, total_chars
+    return freq_table, freq, length_string

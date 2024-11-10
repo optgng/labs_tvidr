@@ -1,39 +1,34 @@
-def calculate_probabilities(data: str):
-    freq = {}
-    for char in data:
-        if char in freq:
-            freq[char] += 1
-        else:
-            freq[char] = 1
+from utils.logger import get_logger
+from arythmetic_compress.calculate_freq import calculate_frequencies
+from arythmetic_compress.calculate_cumulative_freq import calculate_cumulative_freq
+from arythmetic_compress.arythmetic_encode import arithmetic_encode
+from arythmetic_compress.arythmetic_decode import arithmetic_decoding
 
-    total_chars = len(data)
-    print(f"Total characters: {total_chars}")
-    print(f"Total unique characters: {len(freq)}")
-    print(f"Unique characters: {freq}")
-
-    # Создаем таблицу частот
-    freq_table = {char: f"{count}/{total_chars}" for char, count in freq.items()}
-
-    print(f"Frequency table: {freq_table}")
-
-    print(type(freq_table.keys()))
-
-
-    # Составляем рабочий отрезок
-    cumulative_frequency = 0
-    working_segment = {}
-
-    sorted_keys = dict(sorted(freq.items(), key=lambda item: item[1], reverse=True))
-
-    print(f"Sorted keys: {sorted_keys}")
-    for char in sorted_keys.keys():
-        cumulative_frequency += freq[char]
-        working_segment[char] = f"{cumulative_frequency}/{total_chars}"
-
-    print(f"Cumulative frequency: {cumulative_frequency}")
-    print(f"Working segment: {working_segment}")
+logger = get_logger(__name__)
 
 
 if __name__ == "__main__":
     test_string = "Кох-и-ноор_"
-    calculate_probabilities(test_string)
+    logger.info("Тестовая строка: " + test_string)
+
+    freq_table, freq, length_string = calculate_frequencies(test_string)
+
+    print("\n" + "#"*80)
+    logger.info("Таблица частот: " + str(freq_table))
+    logger.info("Частота: " + str(freq))
+    logger.info("Общее количество символов: " + str(length_string))
+
+    working_segment = calculate_cumulative_freq(freq, length_string)
+
+    print("\n" + "#"*80)
+    logger.info("Рабочий сегмент: " + str(working_segment))
+
+    print("\n" + "#"*80)
+    encoded_value = arithmetic_encode(test_string, freq, working_segment, length_string)
+    logger.info("Закодированное значение: " + str(encoded_value))
+
+    decoded_string = arithmetic_decoding(encoded_value, length_string, freq, working_segment)
+
+    print("\n" + "#"*80)
+    logger.info("Раскодированное значение: " + str(decoded_string))
+
