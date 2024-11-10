@@ -1,55 +1,39 @@
-from services.output_matrix import print_matrix
-from services.output_array import print_array
-from services.genereate_square_matrix import generate_square_matrix
-from services.genereate_square_matrix import generate_square_matrix_random
-from services.save_output_to_file import save_output_to_file
-from core.column_traversal import column_traversal
-from core.rle_compress import rle_compress
-from core.hufmann_compress import huffman_compress
-from utils.logger import get_logger
+def calculate_probabilities(data: str):
+    freq = {}
+    for char in data:
+        if char in freq:
+            freq[char] += 1
+        else:
+            freq[char] = 1
 
-logger = get_logger(__name__)
+    total_chars = len(data)
+    print(f"Total characters: {total_chars}")
+    print(f"Total unique characters: {len(freq)}")
+    print(f"Unique characters: {freq}")
+
+    # Создаем таблицу частот
+    freq_table = {char: f"{count}/{total_chars}" for char, count in freq.items()}
+
+    print(f"Frequency table: {freq_table}")
+
+    print(type(freq_table.keys()))
 
 
-def output(matrix: list, matrix_size: int, depth: int):
-    print("\n" + "#" * 80)
-    print("Исходная матрица:")
-    print_matrix(matrix)
+    # Составляем рабочий отрезок
+    cumulative_frequency = 0
+    working_segment = {}
 
-    traversal_result = column_traversal(matrix, matrix_size, depth)
+    sorted_keys = dict(sorted(freq.items(), key=lambda item: item[1], reverse=True))
 
-    print("\n" + "#" * 80)
-    print("Результат обхода:")
-    print_array(traversal_result)
+    print(f"Sorted keys: {sorted_keys}")
+    for char in sorted_keys.keys():
+        cumulative_frequency += freq[char]
+        working_segment[char] = f"{cumulative_frequency}/{total_chars}"
 
-    print("\n" + "#" * 80)
-    print("Результат RLE сжатия:")
-    rle_result = rle_compress(traversal_result)
-    print_array(rle_result)
-
-    print("\n" + "#" * 80)
-    huffman_codes, compressed_data = huffman_compress(rle_result)
-
-    print("Словарь Хаффмана:")
-    print(huffman_codes)
-
-    print("\n")
-    print("Результат сжатия:")
-    print_array(compressed_data)
-
-    print("\n")
+    print(f"Cumulative frequency: {cumulative_frequency}")
+    print(f"Working segment: {working_segment}")
 
 
 if __name__ == "__main__":
-    matrix_size = int(input("Введите размерность матрицы: "))
-
-    depth = int(input("Введите глубину обхода(depth): "))
-
-    logger.info("Создаю матрицу...")
-    matrix = generate_square_matrix_random(matrix_size)
-
-    output(matrix, matrix_size, depth)
-    logger.info("Сохраняю вывод в файл...")
-    save_output_to_file("data/output.txt", output, matrix, matrix_size, depth)
-
-
+    test_string = "Кох-и-ноор_"
+    calculate_probabilities(test_string)

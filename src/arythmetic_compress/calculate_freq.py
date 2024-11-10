@@ -1,0 +1,25 @@
+from utils.logger import get_logger
+
+logger = get_logger(__name__)
+
+
+def calculate_frequencies(data: str):
+    freq = {}
+    for char in data:
+        if char in freq:
+            freq[char] += 1
+        else:
+            freq[char] = 1
+
+    total_chars = len(data)
+
+    logger.debug(f"Total characters: {total_chars}")
+    logger.debug(f"Total unique characters: {len(freq)}")
+    logger.debug(f"Unique characters: {freq}")
+
+    # Создаем таблицу частот
+    freq_table = {char: f"{count}/{total_chars}" for char, count in freq.items()}
+
+    logger.debug(f"Frequency table: {freq_table}")
+
+    return freq_table, freq, total_chars
