@@ -15,7 +15,7 @@ def calculate_cumulative_freq(freq: dict, length_string: int) -> dict:
     for char in sorted_keys.keys():
         cumulative_frequency += freq[char]
         working_freq_segment[char] = f"{cumulative_frequency}/{length_string}"
-        working_number_segment[char] = round(cumulative_frequency/length_string, 4)
+        working_number_segment[char] = cumulative_frequency/length_string
     
     logger.debug(f"Cumulative frequency: {cumulative_frequency}")
     logger.debug(f"Working segment: {working_freq_segment}")

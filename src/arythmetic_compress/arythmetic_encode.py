@@ -12,7 +12,7 @@ def arithmetic_encode(data: str, freq: dict, cumulative_freq: dict, length_strin
         high_interval = low_interval + range_width * cumulative_freq[char]
         low_interval = low_interval + range_width * (cumulative_freq[char] - (freq[char] / length_string))
 
-        logger.debug(f"Encoding '{char}': interval=({round(low_interval, 4)}, {round(high_interval, 4)})")
+        logger.debug(f"Encoding '{char}': interval=({low_interval}, {high_interval})")
 
     encoded_value = (low_interval + high_interval) / 2
     logger.debug(f"Encoded value: {encoded_value}")
